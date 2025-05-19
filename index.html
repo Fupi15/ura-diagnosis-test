@@ -1,18 +1,135 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>オーラ診断テスト</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fffaf7;
+      color: #333;
+      padding: 2rem;
+    }
+    .question {
+      display: none;
+    }
+    .question.active {
+      display: block;
+    }
+    .question button {
+      display: block;
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0e5df;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #result {
+      display: none;
+      padding: 2rem;
+      background: #fefefe;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>オーラ診断テスト</h1>
-    <div id="question-box"></div>
-    <div id="result-box" class="hidden"></div>
-    <button id="next-button">次へ</button>
+  <h1>オーラ診断テスト</h1>
+
+  <div id="questions">
+    <div class="question active" data-index="0">
+      <p>Q1. 朝の過ごし方は？</p>
+      <button onclick="answer('A')">ゆっくり余裕を持ちたい</button>
+      <button onclick="answer('B')">ギリギリまで寝ていたい</button>
+    </div>
+    <div class="question" data-index="1">
+      <p>Q2. 人と接するときに重視するのは？</p>
+      <button onclick="answer('A')">共感</button>
+      <button onclick="answer('B')">的確さ</button>
+    </div>
+    <div class="question" data-index="2">
+      <p>Q3. 初対面では？</p>
+      <button onclick="answer('A')">自分から話しかける</button>
+      <button onclick="answer('B')">相手の出方をうかがう</button>
+    </div>
+    <div class="question" data-index="3">
+      <p>Q4. 自然と惹かれるのは？</p>
+      <button onclick="answer('A')">神秘的なもの</button>
+      <button onclick="answer('B')">洗練されたもの</button>
+    </div>
+    <div class="question" data-index="4">
+      <p>Q5. 決断を下すときは？</p>
+      <button onclick="answer('A')">直感で決める</button>
+      <button onclick="answer('B')">情報を集めて考える</button>
+    </div>
+    <div class="question" data-index="5">
+      <p>Q6. 忙しい時の対応は？</p>
+      <button onclick="answer('A')">感情的になる</button>
+      <button onclick="answer('B')">冷静に効率化する</button>
+    </div>
+    <div class="question" data-index="6">
+      <p>Q7. 自分の好きなものは？</p>
+      <button onclick="answer('A')">ふわふわ・可愛い</button>
+      <button onclick="answer('B')">シャープ・クール</button>
+    </div>
+    <div class="question" data-index="7">
+      <p>Q8. 子どもの頃のあなたは？</p>
+      <button onclick="answer('A')">空想や妄想が好きだった</button>
+      <button onclick="answer('B')">現実的で落ち着いていた</button>
+    </div>
+    <div class="question" data-index="8">
+      <p>Q9. 人生において大事なのは？</p>
+      <button onclick="answer('A')">心のつながり</button>
+      <button onclick="answer('B')">達成と成長</button>
+    </div>
+    <div class="question" data-index="9">
+      <p>Q10. 自分の強みは？</p>
+      <button onclick="answer('A')">やさしさ</button>
+      <button onclick="answer('B')">行動力</button>
+    </div>
+    <div class="question" data-index="10">
+      <p>Q11. もし魔法が使えたら？</p>
+      <button onclick="answer('A')">癒しの魔法を使いたい</button>
+      <button onclick="answer('B')">空を飛びたい</button>
+    </div>
   </div>
-  <script src="script.js"></script>
+
+  <div id="result"></div>
+
+  <script>
+    let currentQuestion = 0;
+    let answers = [];
+
+    function answer(option) {
+      answers.push(option);
+      const questions = document.querySelectorAll('.question');
+      questions[currentQuestion].classList.remove('active');
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        questions[currentQuestion].classList.add('active');
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      // 仮の簡易ロジック（本来はスコアを集計して31タイプを分類）
+      const typeIndex = answers.filter(a => a === 'A').length % 31;
+      const colorNames = [
+        "白", "桜色", "桃色", "紅色", "赤", "朱色", "橙色", "琥珀色", "山吹色",
+        "黄色", "鶯色", "萌黄色", "若草色", "緑", "青緑", "ターコイズ", "水色",
+        "空色", "青", "藍色", "群青色", "紺色", "紫", "藤色", "菫色", "ラベンダー",
+        "灰色", "銀色", "金色", "黒", "透明"
+      ];
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.innerHTML = `<h2>あなたのオーラは「${colorNames[typeIndex]}」です！</h2><p>（この後、詳細なメッセージを差し込めます）</p>`;
+      document.getElementById('questions').style.display = 'none';
+    }
+  </script>
 </body>
 </html>
